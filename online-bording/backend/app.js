@@ -16,6 +16,6 @@ app.get("/", (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`App is running at http://localhost:${port}`);
+app.listen(port, '192.168.152.110', () => {
+  console.log(`App is running at http://192.168.152.110:${port}`);
 });
