@@ -1,12 +1,13 @@
 {
   "name": "pipe",
   "version": "1.0.0",
+  "node-version": "18.17.1",
   "description": "",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
     "start": "node dist/app.js",
-    "dev": "ts-node src/app.ts",
+    "dev": "ts-node ./app.ts",
     "lint": "eslint . --ext .ts"
   },
   "keywords": [],
