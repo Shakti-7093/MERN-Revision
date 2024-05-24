@@ -11,6 +11,8 @@ export interface IUser extends mongoose.Document {
   children?: {
     name: string;
     age: number;
+    addharnumber: number | null;
+    pan: number | null;
   }[];
   address?: string;
   investments?: {
@@ -18,11 +20,11 @@ export interface IUser extends mongoose.Document {
     amount: number;
     date: Date | null;
   }[];
-  marride?: boolean;
+  marride: boolean;
   wife?: string;
-  contacts?: {
+  contacts: {
     phone: string;
-    landline: string;
+    landline: string | null;
   }[];
   aadharnumber: string;
   pan: string;
@@ -34,6 +36,13 @@ export interface IUser extends mongoose.Document {
     ifsc: string;
     bankname: string;
     balance: number;
+  }[];
+  transactions: {
+    transactiondate: Date | null;
+    transactionamount: number | null;
+    transactiontype: string | null;
+    transactionmode: string | null;
+    transactionremarks: string | null;
   }[];
   loandetails: {
     loantype: string;
@@ -49,6 +58,11 @@ export interface IUser extends mongoose.Document {
     dpid: string;
     dpname: string;
   };
+  dematlogindetails: {
+    username: string;
+    password: string;
+  };
+  gstnumber: string | null;
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date | null;
