@@ -43,6 +43,9 @@ export interface IUser extends mongoose.Document {
     transactiontype: string | null;
     transactionmode: string | null;
     transactionremarks: string | null;
+    transactionto: string | null;
+    transactionfrom: string | null;
+    status: string | null;
   }[];
   loandetails: {
     loantype: string;
@@ -51,7 +54,7 @@ export interface IUser extends mongoose.Document {
     loaninterest: number;
     loanstartdate: Date;
     loanenddate: Date;
-    loanbank: string;
+    loanbankname: string;
   }[];
   dematdetails: {
     dematnumber: string;
@@ -63,6 +66,7 @@ export interface IUser extends mongoose.Document {
     password: string;
   };
   gstnumber: string | null;
+  role: string;
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date | null;

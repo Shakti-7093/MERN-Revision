@@ -1,17 +1,17 @@
-import express, { Request, Response, NextFunction } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 import bodyParser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
-// import routes from "./routes";
-import { notFound, errorHandler } from "./src/middlewares/index";
 import dotenv from "dotenv";
 import { connect, disconnect } from "./src/db";
+import { useServer } from "./src/utils/hooks/useServer";
 
 dotenv.config();
 
 const app = express();
+const port = process.env.PORT || 3000;
 
 app.use(morgan("dev"));
 app.use(bodyParser.json());
@@ -19,35 +19,45 @@ app.use(cors());
 app.use(helmet());
 app.use(compression());
 
-// app.use("/api", routes);
-
-app.get("/", (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const message = "Welcome to the Pipe API";
-    res.json({ message });
-  } catch (error) {
-    next(error);
-  }
+// Middlewares
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.status(404).send({ error: "Not Found" });
+  next();
 });
 
-app.use(notFound);
-app.use(errorHandler);
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.error(err.stack);
+  res.status(500).send({ error: err.message });
+  next();
+});
 
-const gracefulShutdown = async () => {
-  try {
+const serverHooks = useServer(app, {
+  onStart: () => {
+    console.log("Server is starting...");
+  },
+  onRequest: (req: Request, res: Response, next: NextFunction) => {
+    console.log(`Received request: ${req.method} ${req.url}`);
+    next();
+  },
+  onStop: () => {
+    console.log("Server is stopping...");
+  },
+});
+
+const server = app.listen(port, () => {
+  console.log(`Server is listening on port ${port}`);
+  connect();
+});
+
+serverHooks.stopServer(server);
+
+const handleExit = () => {
+  server.close(() => {
     disconnect();
-    console.log("Mongoose connection closed due to app termination");
+    console.log("Server has been closed.");
     process.exit(0);
-  } catch (error) {
-    console.error("Error during Mongoose disconnection", error);
-    process.exit(1);
-  }
+  });
 };
 
-process.on("SIGINT", gracefulShutdown);
-process.on("SIGTERM", gracefulShutdown);
-
-app.listen(3000, () => {
-  connect();
-  console.log("Server is listening on port 3000");
-});
+process.on("SIGINT", handleExit);
+process.on("SIGTERM", handleExit);

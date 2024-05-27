@@ -55,6 +55,7 @@ const userSchema = new mongoose.Schema({
         trim: true,
         default: null,
       },
+      default: null,
     },
   ],
   address: {
@@ -152,6 +153,19 @@ const userSchema = new mongoose.Schema({
         type: String,
         trim: true,
       },
+      transactionto: {
+        type: String,
+        trim: true,
+      },
+      transactionfrom: {
+        type: String,
+        trim: true,
+      },
+      status: {
+        type: String,
+        enum: ["Pending", "Success", "Failed"],
+        default: "Pending",
+      },
       default: null,
     },
   ],
@@ -182,7 +196,7 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: null,
       },
-      loanbank: {
+      loanbankname: {
         type: String,
         trim: true,
         default: null,
@@ -223,6 +237,11 @@ const userSchema = new mongoose.Schema({
     minLenght: 15,
     maxLenght: 15,
     default: null,
+  },
+  role: {
+    type: String,
+    enum: ["user", "admin"],
+    default: "user",
   },
   createdAt: {
     type: Date,
