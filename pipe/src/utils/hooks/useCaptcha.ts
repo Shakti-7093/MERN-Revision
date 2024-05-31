@@ -1,8 +1,5 @@
 import { createCanvas } from "canvas";
 import crypto from "crypto";
-import useState from "./useState";
-
-const [data, setData] = useState<string | null>(null);
 
 const useCaptcha = () => {
   const generateCaptcha = () => {
@@ -56,10 +53,6 @@ const useCaptcha = () => {
       );
     }
 
-    console.log("captchaText ", captchaText);
-
-    setData(captchaText);
-
     return {
       captchaText,
       captchaImage: canvas.toDataURL(),
@@ -68,11 +61,5 @@ const useCaptcha = () => {
 
   return { generateCaptcha };
 };
-
-console.log("data ", data);
-const { generateCaptcha } = useCaptcha();
-const captcha = generateCaptcha();
-console.log("Generated Captcha:", captcha);
-console.log("State data:", data);
 
 export default useCaptcha;

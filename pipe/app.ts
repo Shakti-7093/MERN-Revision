@@ -7,6 +7,7 @@ import compression from "compression";
 import dotenv from "dotenv";
 import { connect, disconnect } from "./src/db";
 import { useServer } from "./src/utils/hooks/useServer";
+import cron from 'node-cron';
 
 dotenv.config();
 
@@ -42,6 +43,11 @@ const serverHooks = useServer(app, {
   onStop: () => {
     console.log("Server is stopping...");
   },
+});
+
+cron.schedule('*/10 * * * * *', () => {
+  console.log('Running a task every 10 seconds');
+  // Perform some task here to keep the API active
 });
 
 const server = app.listen(port, () => {
