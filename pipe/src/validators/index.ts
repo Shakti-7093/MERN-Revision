@@ -24,7 +24,12 @@ const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
         tokenValue,
         secret as jwt.Secret
       ) as jwt.JwtPayload;
-      userModel = decodedToken.role === "admin" ? Admin : User;
+      userModel =
+        decodedToken.role === "admin"
+          ? Admin
+          : decodedToken.role === "client" || decodedToken.role === "user"
+          ? User
+          : Admin;
     } else {
       throw new Error("Invalid token format");
     }
