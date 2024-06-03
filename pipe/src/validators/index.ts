@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../models/users";
 import Admin from "../models/admin";
+import Client from "../models/client";
 import { Request, Response, NextFunction } from "express";
 
 const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
@@ -20,16 +21,25 @@ const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
       if (!secret) {
         next("JWT secret is not defined");
       }
+
       decodedToken = jwt.verify(
         tokenValue,
         secret as jwt.Secret
       ) as jwt.JwtPayload;
+
+      // userModel =
+      //   decodedToken.role === "admin"
+      //     ? Admin
+      //     : decodedToken.role === "client" || decodedToken.role === "user"
+      //     ? User
+      //     : Admin;
+
       userModel =
         decodedToken.role === "admin"
           ? Admin
-          : decodedToken.role === "client" || decodedToken.role === "user"
-          ? User
-          : Admin;
+          : decodedToken.role === "client"
+          ? Client
+          : User;
     } else {
       throw new Error("Invalid token format");
     }

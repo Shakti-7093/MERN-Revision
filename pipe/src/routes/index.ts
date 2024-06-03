@@ -154,4 +154,25 @@ router.get(
   }
 );
 
+router.get("/users", async (req: Request, res: Response) => {
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.limit as string) || 10;
+
+  const skip = (page - 1) * limit;
+
+  try {
+    const items = await User.find().skip(skip).limit(limit);
+    const total = await User.countDocuments();
+
+    res.json({
+      items,
+      total,
+      page,
+      pages: Math.ceil(total / limit),
+    });
+  } catch (err) {
+    res.status(500).json({ error: "An error occurred while fetching items" });
+  }
+});
+
 export default router;

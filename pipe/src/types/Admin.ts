@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 export interface IAdmin extends mongoose.Document {
+  id?: string;
   username: string;
   email: string;
   password: string;
